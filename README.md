@@ -40,7 +40,15 @@ While the Merach T-25B advertises standard Bluetooth SIG **Fitness Machine Servi
 
 ---
 
-## Flashing Instructions (macOS / Linux / Windows)
+## ⚡ Quick Web Installer (No Coding or Setup Required)
+You can flash this firmware directly onto your **M5Stack CoreS3** via your web browser:
+1. Open the **[Web Flasher](https://alex-mckinlay.github.io/ftms-remote/)** in Google Chrome or Microsoft Edge.
+2. Connect your M5Stack CoreS3 SE to your computer with a USB-C data cable.
+3. Click **Install**, choose your serial port, and wait ~30 seconds for the installation to finish.
+
+---
+
+## Flashing from Source (PlatformIO)
 
 ### 1. Prerequisites
 1. Download and install [Visual Studio Code](https://code.visualstudio.com/).

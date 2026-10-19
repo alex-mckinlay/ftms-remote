@@ -1,0 +1,106 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: [ main ]
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install PlatformIO and esptool
+        run: |
+          python -m pip install --upgrade pip
+          pip install platformio esptool
+
+      - name: Build PlatformIO Firmware
+        run: |
+          pio run
+
+      - name: Generate Binaries and Web Installer Files
+        run: |
+          mkdir -p build-artifacts
+          mkdir -p docs
+
+          BOOT_APP0=$(find ~/.platformio/packages/ -name "boot_app0.bin" | head -n 1)
+          if [ -z "$BOOT_APP0" ]; then
+            echo "Error: boot_app0.bin not found"
+            exit 1
+          fi
+
+          echo "Found boot_app0 at: $BOOT_APP0"
+
+          # 1. Generate merged factory binary
+          esptool.py --chip esp32s3 merge_bin \
+            -o build-artifacts/ftms-remote-m5stack-cores3-merged.bin \
+            --flash_mode dio \
+            --flash_freq 80m \
+            --flash_size 16MB \
+            0x0000 .pio/build/m5stack-cores3/bootloader.bin \
+            0x8000 .pio/build/m5stack-cores3/partitions.bin \
+            0xe000 "$BOOT_APP0" \
+            0x10000 .pio/build/m5stack-cores3/firmware.bin
+
+          # 2. Copy individual binaries for release artifacts
+          cp .pio/build/m5stack-cores3/firmware.bin build-artifacts/firmware.bin
+          cp .pio/build/m5stack-cores3/bootloader.bin build-artifacts/bootloader.bin
+          cp .pio/build/m5stack-cores3/partitions.bin build-artifacts/partitions.bin
+
+          # 3. Copy binaries to docs/ for ESP Web Tools GitHub Pages hosting
+          cp .pio/build/m5stack-cores3/firmware.bin docs/
+          cp .pio/build/m5stack-cores3/bootloader.bin docs/
+          cp .pio/build/m5stack-cores3/partitions.bin docs/
+          cp "$BOOT_APP0" docs/
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ftms-remote-binaries
+          path: build-artifacts/
+
+      - name: Setup Pages
+        if: github.ref == 'refs/heads/main'
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages Artifact
+        if: github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/
+
+      - name: Deploy to GitHub Pages
+        if: github.ref == 'refs/heads/main'
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Create Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            build-artifacts/ftms-remote-m5stack-cores3-merged.bin
+            build-artifacts/firmware.bin
+            build-artifacts/bootloader.bin
+            build-artifacts/partitions.bin
+          generate_release_notes: true

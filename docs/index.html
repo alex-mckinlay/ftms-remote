@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>M5Stack CoreS3 Web Flasher | FTMS Treadmill Remote</title>
+  <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --card-bg: #161b22;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --heading: #f0f6fc;
+      --accent: #30d158;
+      --accent-hover: #28b84c;
+      --cyan: #64d2ff;
+      --orange: #ff9f0a;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+
+    .container {
+      max-width: 680px;
+      width: 90%;
+      margin: 40px auto;
+      text-align: center;
+    }
+
+    h1 {
+      color: var(--heading);
+      font-size: 2.2rem;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: var(--cyan);
+      margin-top: 0;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+      text-align: left;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    .flasher-box {
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    esp-web-install-button {
+      --esp-tools-button-border-radius: 8px;
+      --esp-tools-button-color: #000;
+      --esp-tools-button-bg: var(--accent);
+      --esp-tools-button-padding: 12px 32px;
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+
+    esp-web-install-button:hover {
+      --esp-tools-button-bg: var(--accent-hover);
+    }
+
+    ol, ul {
+      padding-left: 20px;
+      line-height: 1.6;
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    code {
+      background: #000;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--orange);
+      font-size: 0.9em;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      background: rgba(48, 209, 88, 0.15);
+      color: var(--accent);
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+
+    a {
+      color: var(--cyan);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .footer {
+      font-size: 0.85rem;
+      color: #8b949e;
+      margin-top: 20px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <span class="badge">ESP Web Tools One-Click Installer</span>
+    <h1>M5Stack CoreS3 FTMS Remote</h1>
+    <p class="subtitle">Dedicated Bluetooth Remote for Merach T-25B &amp; FTMS Walking Pads</p>
+
+    <div class="card">
+      <h3>⚡ Quick Installation</h3>
+      <p>Flash the firmware directly to your device via your web browser without installing PlatformIO or Python (requires Chrome or Edge):</p>
+      <ol>
+        <li>Connect your <strong>M5Stack CoreS3 SE</strong> to your computer using a USB-C data cable.</li>
+        <li>If flashing fails to connect automatically, put the board into <strong>Download Mode</strong>: press and hold the red side button for 2–3 seconds until the internal green LED illuminates.</li>
+        <li>Click <strong>Install</strong> below, choose the USB Serial port (typically <code>usbmodem...</code>), and confirm installation.</li>
+      </ol>
+      <div class="flasher-box">
+        <esp-web-install-button manifest="manifest.json"></esp-web-install-button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>✨ Features</h3>
+      <ul>
+        <li><strong>Dual Protocol:</strong> Reverse-engineered Merach vendor protocol (<code>0xFFF2</code>) for simultaneous speed &amp; incline control plus FTMS (<code>0x2ACD</code>) telemetry.</li>
+        <li><strong>Closed-Loop Control:</strong> Auto-detects motor ramping, mechanical stalls, and external remote adjustments.</li>
+        <li><strong>Large Touch Steppers:</strong> Press-and-hold speed (MPH) and incline (%) cards designed for effortless use while walking.</li>
+        <li><strong>Audible Speaker Feedback:</strong> Distinct confirmation, tick, and status tones.</li>
+      </ul>
+    </div>
+
+    <div class="footer">
+      <p>Source Code, Documentation, and Issue Tracking available on <a href="https://github.com/alex-mckinlay/ftms-remote" target="_blank" rel="noopener">GitHub</a>.</p>
+    </div>
+  </div>
+</body>
+</html>
