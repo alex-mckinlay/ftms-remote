@@ -1,0 +1,12 @@
+.pio/
+.vscode/
+.clang-format
+*.bin
+*.elf
+*.pklg
+*.pcap
+*.pcapng
+.DS_Store
+.antigravitycli/
+.agents/
+.gemini/
